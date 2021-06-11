@@ -27,9 +27,7 @@ def main():
     dispatcher.add_handler(InlineQueryHandler(inlinequery))
 
 
-    updater.start_webhook(listen="0.0.0.0", port=os.getenv('PORT', default=8000), url_path=TOKEN, webhook_url="ftstickerbot.herokuapp.com/token")
-
-    updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0", port=os.getenv('PORT', default=8000), url_path=TOKEN, webhook_url="https://ftstickerbot.herokuapp.com/"+TOKEN)
 
     updater.idle()
 
