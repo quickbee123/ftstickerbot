@@ -19,12 +19,15 @@ logger = logging.getLogger(__name__)
 
 def main():
 
-    token = os.environ.get('TOKEN')
-    updater = Updater(token)
+    TOKEN = os.getenv('TOKEN')
+    updater = Updater(TOKEN)
     dispatcher = updater.dispatcher
 
     dispatcher.add_handler(CommandHandler(["start","help","h"],start))
     dispatcher.add_handler(InlineQueryHandler(inlinequery))
+
+
+    updater.start_webhook(listen="0.0.0.0", port=os.getenv('PORT', default=8000), url_path=TOKEN, webhook_url="ftstickerbot.herokuapp.com/token")
 
     updater.start_polling()
 
