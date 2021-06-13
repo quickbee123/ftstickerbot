@@ -1,30 +1,27 @@
 import psycopg2
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 class Database():
-    def __init__(self):
-        try:
-            self.conn =  psycopg2.connect(                                                  
-                user = os.getenv("DB_USER"),                                      
-                password = os.getenv("DB_PASSWORD"),                                  
-                host = os.getenv("DB_HOST"),                                            
-                port = os.getenv("DB_PORT"),                                          
-                database = os.getenv("DB_NAME")                                       
-            )
-            self.cur = self.conn.cursor()
-        except:
-            print("Cannot connect to database")    
+
+    def __init__(self, db_url:str):
+
+        self.conn =  psycopg2.connect(db_url)
+
+    def __del__(self):
+
+        self.conn.close()    
 
     def get_stickers(self):
-        self.cur.execute("SELECT * FROM stickers")
-        stickers = self.cur.fetchall()
-        self.close()
+
+        cur = self.conn.cursor()
+        cur.execute("SELECT * FROM stickers")
+        stickers = cur.fetchall()
+        cur.close()
         return stickers
 
-    def close(self):
-        self.cur.close()
-        self.conn.close()    
+    def add_sticker(self, file_id:str):
+
+        cur = self.conn.cursor()
+        cur.execute('INSERT INTO stickers (file) VALUES (%s)',(file_id,))
+        self.conn.commit()
+        cur.close()

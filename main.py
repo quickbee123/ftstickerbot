@@ -1,36 +1,26 @@
-import logging
 import os
 from dotenv import load_dotenv
-
-
-from telegram.ext import Updater, CommandHandler, InlineQueryHandler
-
-from actions.start import start
-from actions.inlinequery import inlinequery
+from server import Server
+from handlers import handlers
 
 load_dotenv()
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-)
-
-logger = logging.getLogger(__name__)
 
 
 def main():
 
-    TOKEN = os.getenv('TOKEN')
-    updater = Updater(TOKEN)
-    dispatcher = updater.dispatcher
+    TOKEN= os.getenv('TOKEN')
+    DB_URL= os.getenv('DB_URL')
+    PORT= os.getenv('PORT')
+    URL= os.getenv('URL')
+    LISTEN= os.getenv('LISTEN')
 
-    dispatcher.add_handler(CommandHandler(["start","help","h"],start))
-    dispatcher.add_handler(InlineQueryHandler(inlinequery))
+    server = Server(DB_URL,TOKEN,handlers)
 
+    if URL:
+        server.production(URL,PORT,LISTEN,TOKEN)
 
-    updater.start_webhook(listen="0.0.0.0", port=os.getenv('PORT', default=8000), url_path=TOKEN, webhook_url="https://ftstickerbot.herokuapp.com/"+TOKEN)
-
-    updater.idle()
+    else:
+        server.development()    
 
 if __name__ == '__main__':
     main()    
-

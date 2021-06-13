@@ -5,7 +5,7 @@ from db.database import Database
 
 def inlinequery(update, context):
 
-    db = Database()
+    db = context.bot_data["database"]
     stickers = db.get_stickers()
     results=[]
 
