@@ -19,4 +19,4 @@ def inlinequery(update, context):
        )
     
     
-    update.inline_query.answer(results)    
+    update.inline_query.answer(results,auto_pagination=True)    
