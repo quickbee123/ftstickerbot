@@ -9,7 +9,7 @@ load_dotenv()
 def main():
 
     TOKEN= os.getenv('TOKEN')
-    DB_URL= os.getenv('DB_URL')
+    DB_URL= os.getenv('DATABASE_URL')
     PORT= os.getenv('PORT')
     URL= os.getenv('URL')
     LISTEN= os.getenv('LISTEN')
